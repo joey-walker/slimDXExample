@@ -37,7 +37,7 @@ namespace DirectX9TestProject
 	
 
 			sprite = new Sprite (device9);
-			texture = Texture.FromFile (device9, "C:\\COMP566\\slimDXExample\\DirectX9TestProject\\sprites\\test.png");
+			texture = Texture.FromFile (device9, "C:\\COMP566\\slimDXExample\\DirectX9TestProject\\sprites\\test2.png");
 		}
 
 
@@ -62,8 +62,8 @@ namespace DirectX9TestProject
 
 			GameLogic ();
 			RenderFrames ();
-			x = x + 0.08f;
-			y = y + 0.05f;
+			x = x + 0.07f;
+			y = y + 0.04f;
 		}
 
 

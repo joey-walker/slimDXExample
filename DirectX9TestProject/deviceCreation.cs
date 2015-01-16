@@ -37,7 +37,7 @@ namespace DirectX9TestProject
 	
 
 			sprite = new Sprite (device9);
-			texture = Texture.FromFile (device9, "C:\\COMP566\\slimDXExample\\DirectX9TestProject\\sprites\\test2.png");
+			texture = Texture.FromFile (device9, "..\\..\\sprites\\test2.png");
 		}
 
 

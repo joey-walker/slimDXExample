@@ -1,106 +1,140 @@
 ﻿using System;
-using System.Windows;
 using System.Drawing;
 using System.Windows.Forms;
 using SlimDX;
 using SlimDX.Direct3D9;
 using SlimDX.Windows;
-using System.Security.Principal;
-using SlimDX.Design;
 
 namespace DirectX9TestProject
 {
 	public class deviceCreation
 	{
 	
+		//Our graphics device
 		static Device device9;
+
+		//We use this to load sprites.
 		static Sprite sprite;
+
+		//Our texture file
 		static Texture texture;
+
+		//Absolute location start for sprite
 		static float x = 20;
 		static float y = 20;
-		public static void initializeGraphics(RenderForm form){
+
+
+
+		//Intialize graphics
+		public static void initializeGraphics (RenderForm form)
+		{
 		
+			//Device presentation paramaters
 			PresentParameters presentParamaters = new PresentParameters ();
+			//Windowed
 			presentParamaters.Windowed = true;
+			//Form's width
 			presentParamaters.BackBufferWidth = form.ClientRectangle.Width;
-			presentParamaters.BackBufferHeight = form.ClientRectangle.Height;;
+			//Forms' height
+			presentParamaters.BackBufferHeight = form.ClientRectangle.Height;
 
 
-				//Acquire the int that the form is bound to.
+			//Acquire the sys int that the form is bound to.
 			presentParamaters.DeviceWindowHandle = form.Handle;
 
-		
 
-
-			device9 = new Device (new Direct3D(),0, DeviceType.Hardware, form.Handle, CreateFlags.HardwareVertexProcessing, presentParamaters);
+			//Our device for graphics
+			device9 = new Device (new Direct3D (), 0, DeviceType.Hardware, form.Handle, CreateFlags.HardwareVertexProcessing, presentParamaters);
 
 	
 
+			//sprite based off device
 			sprite = new Sprite (device9);
+
+			//Our texture
 			texture = Texture.FromFile (device9, "..\\..\\sprites\\test2.png");
 		}
 
 
 		public static void Main ()
 		{
-
+			//using allows cleanup of form afterwards
 			using (RenderForm form = new RenderForm ("Dreadnought Kamzhor")) {
 			
+				//Window resolution is 1024 x 728
 				form.Width = 1024;
 				form.Height = 728;
+				//No resizing
 				form.FormBorderStyle = FormBorderStyle.Fixed3D;
 
+				//Create our device, textures and sprites
 				initializeGraphics (form);
 			
+				//Application loop
 				MessagePump.Run (form, GameLoop);
 
+				//Dispose no longer in use objects.
 				Cleanup ();
 			}
 		}
-		 
-		private static void GameLoop(){
 
+		private static void GameLoop ()
+		{
+			//Logic then render then loop
 			GameLogic ();
 			RenderFrames ();
+
+			//Example change to offset to move picture accross
 			x = x + 0.07f;
 			y = y + 0.04f;
 		}
 
 
-		private static void GameLogic(){
-
-
+		private static void GameLogic ()
+		{
+			//This is where would place game logic for a game
 		}
 
-		private static void RenderFrames(){
+		private static void RenderFrames ()
+		{
 		
-			device9.Clear(ClearFlags.Target, Color.AliceBlue, 1.0f, 0);
-			device9.BeginScene();
+			//Clear the whole screen
+			device9.Clear (ClearFlags.Target, Color.AliceBlue, 1.0f, 0);
 
+			//Render whole frame
+			device9.BeginScene ();
 
-			SlimDX.Color4 color = new SlimDX.Color4(Color.White);
-			sprite.Begin(SpriteFlags.AlphaBlend);
+			//not sure why we need this yet...
+			SlimDX.Color4 color = new SlimDX.Color4 (Color.White);
+
+			//being sprite render.
+			sprite.Begin (SpriteFlags.AlphaBlend);
 		
+			//Translate the sprite with a 3d matrix with no z change.
 			sprite.Transform = Matrix.Translation (x, y, 0);
-
-
-
+		
+			//Render sprite.
 			sprite.Draw (texture, color);
-			sprite.End();
+
+			//end render
+			sprite.End ();
 
 			// End the scene.
-			device9.EndScene();
+			device9.EndScene ();
 
 			// Present the backbuffer contents to the screen.
-			device9.Present();
+			device9.Present ();
 
 		}
 
-		private static void Cleanup()
+		//Dispose unused objects
+		private static void Cleanup ()
 		{
 			if (device9 != null)
-				device9.Dispose();
+				device9.Dispose ();
+
 			sprite.Dispose ();
+			texture.Dispose ();
 		}
 
 
